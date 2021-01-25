@@ -9,28 +9,57 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 })
 
-/**
- * 这个示例将经自动鉴权过的小程序用户 openid 返回给小程序端
- * 
- * event 参数包含小程序端调用传入的 data
- * 
- */
-exports.main = async (event, context) => {
-  console.log(event)
-  console.log(context)
+const db = cloud.database()
+exports.main = async (request) => {
+  console.log(request)
 
-  // 可执行其他自定义逻辑
-  // console.log 的内容可以在云开发云函数调用日志查看
-
-  // 获取 WX Context (微信调用上下文)，包括 OPENID、APPID、及 UNIONID（需满足 UNIONID 获取条件）等信息
   const wxContext = cloud.getWXContext()
+  //判断用户类型
+  var res = await db.collection('admin').limit(1).get()
+  var data = res.data[0]
+  var index = data['admins'].findIndex(item => item == wxContext.OPENID)
+
+  var user = index != -1 ? 'admin' : 'user'
+
+  //用户信息注册
+  const userCol = db.collection('users')
+  res = await userCol.where({
+    openid: wxContext.OPENID
+  }).get()
+
+  if (res.data.length == 0) {//新用户
+    await userCol.add({
+      data: {
+        info: {
+          avatarUrl: request.userInfo.avatarUrl,
+          nickName: request.userInfo.nickName
+        },
+        openid: wxContext.OPENID
+      }
+    }).catch(console.error)
+
+  } else {
+    if (res.data[0].info.avatarUrl != request.userInfo.avatarUrl
+      || res.data[0].info.nickName != request.userInfo.nickName) {
+      await userCol.where({
+        openid: wxContext.OPENID
+      }).update({
+        info: {
+          avatarUrl: request.userInfo.avatarUrl,
+          nickName: request.userInfo.nickName
+        }
+      }).catch(console.error)
+    }
+
+  }
+  //返回信息
 
   return {
-    event,
-    openid: wxContext.OPENID,
-    appid: wxContext.APPID,
-    unionid: wxContext.UNIONID,
-    env: wxContext.ENV,
+    success: true,
+    data: {
+      user: user,
+      openid: wxContext.OPENID
+    }
   }
 }
 
