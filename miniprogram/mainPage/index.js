@@ -96,7 +96,9 @@ Page({
 
   },
   onSelectedAdmin: function (e) {
-
+    wx.navigateTo({
+      url: '../admin/index/index?openid=' + this.data._openid 
+    })
   },
 
   onShareAppMessage : function(e){

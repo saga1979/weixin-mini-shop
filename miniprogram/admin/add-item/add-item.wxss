@@ -1,0 +1,11 @@
+/* miniprogram/admin/add-item/add-item.wxss */
+.goods-image{
+  height: 48px;
+  width: 48px;
+  margin-right: 5px;
+}
+.goods-image-list{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+}

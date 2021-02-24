@@ -39,7 +39,7 @@
   },
   "appid": "wxf5472eef4e8aec7f",
   "projectname": "weixin-mini-shop",
-  "libVersion": "2.14.1",
+  "libVersion": "2.15.0",
   "condition": {
     "search": {
       "list": []

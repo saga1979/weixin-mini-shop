@@ -45,7 +45,7 @@ exports.main = async (request) => {
         openid: wxContext.OPENID
       }).update({
         info: {
-          avatarUrl: request.userInfo.avatarUrl,
+          avatarUrl: request.userInfo.avatarUrl, 
           nickName: request.userInfo.nickName
         }
       }).catch(console.error)

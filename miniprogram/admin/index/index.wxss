@@ -1,0 +1,31 @@
+/* miniprogram/admin/index/index.wxss */
+
+.add-wrap {
+  height: 48px;
+  width: 48px;
+  border-radius: 100%;
+  position: fixed;
+  bottom: 150rpx;
+  right: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  background-color: transparent;
+  /* background-color: rgba(0, 255, 255, 0.548); */
+}
+
+.add-wrap image {
+  width: 48px;
+  height: 48px;
+  
+}
+
+#admin-index-tabber {
+  position:fixed; 
+  bottom:0;
+  width:100%;
+  left:0;
+  right:0;
+}
+

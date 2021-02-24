@@ -1,0 +1,44 @@
+<mp-form-page title="完善新物品信息">
+  <mp-form id="form" rules="{{rules}}" models="{{formData}}">
+
+    <mp-cells title="" footer="">
+      <mp-cell prop="goods_name" title="名称" ext-class="">
+        <input data-field="name" class="weui-input" placeholder="商品名称" model:value="{{goodsName}}" />
+      </mp-cell>
+      <mp-cell ext-class="weui-cell_select weui-cell_select-after" title="单位">
+        <picker bindchange="bindUnitChange" value="{{unitIndex}}" range="{{units}}">
+          <view class="weui-select">{{units[unitIndex]}}</view>
+        </picker>
+      </mp-cell>
+      <mp-cell prop="goods_price" title="单价" ext-class="">
+        <input data-field="price" class="weui-input" type="digit" placeholder="请输入商品单价（元）"
+          model:value="{{goodsPrice}}" />
+      </mp-cell>
+
+
+      <mp-cell has-header="{{false}}" has-footer="{{false}}" ext-class="" title="描述">
+        <textarea class="weui-textarea" name="goods_text" model:value="{{goodsDes}}" placeholder="请输入商品描述"
+          style="height: 100px" />
+        </mp-cell>
+						<mp-cell has-header="{{false}}" has-footer="{{false}}" title="" ext-class="" >
+			<view class="goods-image-list">
+				 <block   wx:for="{{imageUrls}}" wx:key="path">
+					 <view bindtap="onPreviewImage" data-index="{{index}}">
+						<image class='goods-image' mode="aspectFit" src="{{item.file}}" />
+					 </view>
+				 </block>		 
+				 <mp-icon icon="add" color="black" size="{{48}}" bindtap="onSelectImg" />
+				 </view>
+      </mp-cell>
+		</mp-cells>
+
+
+  </mp-form>
+  <view slot="button">
+    <button class="weui-btn" type="primary" bindtap="onUpdateItem">确定</button>
+  </view>
+
+</mp-form-page>
+
+<mp-gallery  hide-on-click="{{true}}" show-delete="{{true}}" show="{{isPreviewing}}" 
+binddelete="onDeletePic" imgUrls="{{previewImageUrls}}" current="{{previewCurrent}}"/>
