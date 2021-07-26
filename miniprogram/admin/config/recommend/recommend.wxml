@@ -1,0 +1,15 @@
+<scroll-view scroll-y="true">
+  <view class="weui-cells">
+
+    <view class="weui-cell weui-cell_switch" wx:for="{{goodsInfos}}" wx:key='_id' wx:if="{{item.isSelling}}">
+      <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+        <image class="weui-media-box__thumb" mode="aspectFit" data-index="{{index}}" bindtap="onSelectImg"
+          src="{{item.imgs[0]}}" />
+      </view>
+      <view class="weui-cell__bd">{{item.name}}</view>
+      <view class="weui-cell__ft">
+        <switch data-id="{{item._id}}" data-index="{{index}}" checked="{{item.recommend}}" bindchange="goodsOnorOff" />
+      </view>
+    </view>
+  </view>
+</scroll-view>

@@ -22,6 +22,6 @@
             <image src="../images/add.ico"></image>
         </view>
     </block>
-    <mp-tabbar id="admin-index-tabber" list="{{functions}}" bindchange="onTabChanged">
-    </mp-tabbar>
+    <mp-tabbar id="admin-index-tabber" list="{{functions}}" bindchange="onTabChanged" />
+ 
 </view>

@@ -39,7 +39,7 @@ Page({
   /**
    * Lifecycle function--Called when page load
    */
-  onLoad: function (options) {
+  onLoad: async function (options) {
     console.debug("option:", options)
     this.setData({
       _openid: options.openid,
@@ -55,6 +55,49 @@ Page({
         self.setData({
           viewHight: new_height
         })
+      }
+    })
+
+    //从云数据库获取现有的商品类别
+    var ret = await wx.cloud.callFunction({
+      name: 'config',
+      data: {
+        cmd: 'goodsTypes-get'
+      }
+    })
+
+    console.debug(ret.result.data)
+
+    this.data._goodsTypes = []
+
+    ret.result.data.forEach(item => {
+      this.data._goodsTypes.push(item.title)
+    })
+
+    //监控数据库商品类别配置
+    this.data._db = wx.cloud.database()
+
+    this.data._watcher = this.data._db.collection('configs').where({
+      openid: this.data._openid
+    }).watch({
+      onChange: function (snapshot) {
+        console.log('docs\'s changed events', snapshot.docChanges)
+        console.log('query result snapshot after the event', snapshot.docs)
+        console.log('is init data', snapshot.type === 'init')
+
+        if (snapshot.docChanges[0] != null
+          && snapshot.docChanges[0].updatedFields != null
+          && snapshot.docChanges[0].updatedFields.goodsTypes != null) {
+          var types = []
+          snapshot.docChanges[0].updatedFields.goodsTypes.forEach(item => {
+            types.push(item.title)
+          })
+          self.data._goodsTypes = types
+        }
+
+      },
+      onError: function (err) {
+        console.error("db watcher:", err)
       }
     })
   },
@@ -235,8 +278,27 @@ Page({
       events: {
         updated: async function (data) {
           console.debug("item:", data.items)
-         
+
           if (data.items.length > 0) {
+            //调用云函数更新
+            wx.showLoading({
+              title: "正在更新数据",
+            })
+            await wx.cloud.callFunction({
+              name: 'goods-op',
+              data: {
+                cmd: 'update',
+                id: data.items[0]._id,
+                data: data.items[0]
+              }
+            }).then(ret => {
+              console.debug(ret)
+            }).catch(console.error)
+
+
+            wx.hideLoading({
+              success: (res) => { },
+            })
             var item_index = self.data.goods_items.findIndex(item => item._id == data.items[0]._id)
             //只刷新必要的部分视图
             self.setData({

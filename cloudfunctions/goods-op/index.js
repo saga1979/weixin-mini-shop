@@ -40,7 +40,7 @@ exports.main = async (request) => {
     case "update":
       try {
         collection.where({
-          _id: request.id
+          _id: request._id
         }).update({
           data: request.data
         })
@@ -52,7 +52,7 @@ exports.main = async (request) => {
       }
       return {
         success: true,
-        data : request.id
+        data: request._id
       }
 
     case "delete":
@@ -86,6 +86,63 @@ exports.main = async (request) => {
         data: res.data
       }
     }
+
+    case 'update-recommend': {
+      var onres = await collection.where({
+        _id: _.in(request.onList)
+      }).update({
+        data: {
+          recommend: true
+        }
+      })
+
+      var offres = await collection.where({
+        _id: _.in(request.offList)
+      }).update({
+        data: {
+          recommend: false
+        }
+      })
+
+      return {
+        success: true,
+        data: {
+          on: onres.stats.updated,
+          off: offres.stats.updated
+        }
+      }
+    }
+    case 'get-recommend':{
+      var res = await collection.where({
+        recommend : true,
+        isSelling : _.neq(false),
+        deleted : _.neq(true)
+      }).get()
+
+      return {
+        success : true,
+        data : res.data
+      }
+    }
+    case "get-notTypes":{
+      var types = request.data.types
+      var fetched = request.data.fetched
+      var res = await collection.skip(fetched).where({ type: _.not(_.in(types) )}).get()
+      return {
+        success: res.data.length > 0 ? true : false,
+        data: res.data
+      }
+    }
+
+    case "get-byTypes": {
+      var types = request.data.types
+      var fetched = request.data.fetched
+      var res = await collection.skip(fetched).where({ type: _.in(types) }).get()
+      return {
+        success: res.data.length > 0 ? true : false,
+        data: res.data
+      }
+    } 
 
     default:
       return {

@@ -1,0 +1,49 @@
+
+<view class="goods-detail">
+  <!-- <view class="page-body">  -->
+    <view class = "page__bd" >
+    <view class="page-section page-section-spacing swiper">
+      <swiper indicator-dots="{{true}}" indicator-active-color="#00FF00" autoplay="{{false}}">
+        <block wx:for="{{goods_item.imgs}}" wx:key="*this">
+          <swiper-item>
+            <image class="swiper-item" mode="aspectFit" src="{{item}}"></image>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+
+    <mp-cells title="" footer="">
+      <mp-cell >
+        <view> 商品名称</view>
+        <input slot="footer" class="weui-input" type="text" value="{{goods_item.name}}" disabled="!{{editable}}" />
+      </mp-cell>
+
+      <view class="weui-cell weui-cell_switch">
+        <view class="weui-cell__bd">是否在售</view>
+        <view class="weui-cell__ft">
+          <switch checked="{{goods_item.isSelling}}" disabled="!{{editable}}" />
+        </view>
+      </view>
+
+      <mp-cell title="单价(元）" ext-class="">
+        <input slot="footer" class="weui-input" type="digit" placeholder="请输入商品单价" value="{{goods_item.price}}" disabled="!{{editable}}" />
+
+      </mp-cell>
+
+      <view class="weui-cell weui-cell_switch">
+        <view class="weui-cell__bd">推荐</view>
+        <view class="weui-cell__ft">
+          <switch model:checked="{{recommend}}" disabled="!{{editable}}" />
+        </view>
+      </view>
+
+      <mp-cell has-header="{{false}}" has-footer="{{false}}" ext-class="" title="描述">
+        <textarea class="weui-textarea" value="{{goods_item.des}}" style="height: 3.3em"  disabled="!{{editable}}" />
+        <view class="weui-textarea-counter">0/200</view>
+      </mp-cell>
+
+    </mp-cells>
+
+    
+  </view>
+</view>

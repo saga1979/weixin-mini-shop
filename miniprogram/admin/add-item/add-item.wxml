@@ -20,15 +20,15 @@
         <textarea class="weui-textarea" name="goods_text" model:value="{{goodsDes}}" placeholder="请输入商品描述"
           style="height: 100px" />
         </mp-cell>
-						<mp-cell has-header="{{false}}" has-footer="{{false}}" title="" ext-class="" >
-			<view class="goods-image-list">
+			<mp-cell has-header="{{false}}" has-footer="{{false}}" title="" ext-class="" >
+			  <view class="goods-image-list">
 				 <block   wx:for="{{imageUrls}}" wx:key="path">
 					 <view bindtap="onPreviewImage" data-index="{{index}}">
 						<image class='goods-image' mode="aspectFit" src="{{item.file}}" />
 					 </view>
 				 </block>		 
 				 <mp-icon icon="add" color="black" size="{{48}}" bindtap="onSelectImg" />
-				 </view>
+				</view>
       </mp-cell>
 		</mp-cells>
 
@@ -41,4 +41,4 @@
 </mp-form-page>
 
 <mp-gallery  hide-on-click="{{true}}" show-delete="{{true}}" show="{{isPreviewing}}" 
-binddelete="onDeletePic" imgUrls="{{previewImageUrls}}" current="{{previewCurrent}}"/>
+binddelete="onDeletePic" imgUrls="{{previewImageUrls}}" current="{{previewCurrent}}" />

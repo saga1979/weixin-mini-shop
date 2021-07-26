@@ -4,7 +4,7 @@ const app = getApp()
 
 Page({
   data: {
-    avatarUrl: '../../images/user-unlogin.png',
+    avatarUrl: '/mainPage/user-unlogin.png',
     userInfo: {},
     login: false,
     isAdmin: false,
@@ -12,15 +12,6 @@ Page({
   },
 
   onLoad: function () {
-    if (!wx.cloud) {
-      wx.redirectTo({
-        url: '../chooseLib/chooseLib',
-      })
-      wx.showToast({
-        title: '云服务不可用',
-      })
-      return
-    }
      // 获取用户信息
     let self = this
     wx.getUserInfo({
@@ -93,6 +84,9 @@ Page({
 
   },
   onSelectedCustomer: function (e) {
+    wx.navigateTo({
+      url: '../customer/index/index?openid=' + this.data._openid 
+    })
 
   },
   onSelectedAdmin: function (e) {

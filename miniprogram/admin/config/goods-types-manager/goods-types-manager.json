@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "mp-vtabs": "/components/weui-ex/vtabs/index",
+    "mp-vtabs-content": "/components/weui-ex/vtabs-content/index",
+    "mp-slideview": "/miniprogram_npm/weui-miniprogram/slideview/slideview"
+  }
+}

@@ -1,0 +1,21 @@
+<scroll-view class="goodsTypes-view" scroll-y style="overflow:hidden;height:{{height}};">
+  <view class="weui-slidecells" wx:for="{{goodsTypes}}" wx:key="name" wx:if="{{!item.deleted}}">
+    <mp-slideview show="{{false}}" buttons="{{item.buttons}}" icon="{{false}}" data-index="{{index}}"
+      bindbuttontap="onClickItem">
+      <view class="weui-slidecell weui-media-box weui-media-box_appmsg" data-index="{{index}}">
+        <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+          <image class="weui-media-box__thumb" data-index="{{index}}" bindtap="onSelectImg" src="{{item.img}}" />
+        </view>
+        <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+          <input id="title-{{index}}" placeholder="输入类别名称" class="weui-media-box__title" data-index="{{index}}"
+            bindinput="onTitleInput" confirm-type="done" value="{{item.title}}"></input>
+          <input id='desc-{{index}}' placeholder="输入类别描述" class="weui-media-box__desc" data-index="{{index}}"
+            bindinput="onDescInput" value="{{item.desc}}"></input>
+        </view>
+      </view>
+    </mp-slideview>
+  </view>
+</scroll-view>
+<view class="add-wrap" bindtap="onAddType">
+  <image src="/admin/images/add.png"></image>
+</view>

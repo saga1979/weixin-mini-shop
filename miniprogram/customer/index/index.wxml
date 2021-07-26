@@ -1,0 +1,29 @@
+<view class="page">
+  <!-- 展示商品列表 -->
+  <scroll-view wx:if="{{pageIndex == 0}}" scroll-y style="overflow:hidden;height:{{viewHight}}px;">
+    <mp-vtabs vtabs="{{goodsTypesForVtabs}}" activeTab="{{activeTab}}" bindtabclick="onSwitchType" bindchange="onChange" class="test">
+      <van-grid column-num="2">
+        <van-grid-item wx:for="{{goods_items}}" wx:key="_id" use-slot text="{{item.name}}">
+          <view style="flex-direction:row">
+            <label>{{item.name}}</label>
+            <view style="flex-direction:column">
+              <image style="width:200rpx; height:200rpx;" mode="aspectFit" data-id="{{item._id}}" src="{{item.imgs[0]}}" bindtap="onShowDetail" />
+              <checkbox checked="{{item.isChecked}}" data-index="{{index}}" data-id="{{item._id}}" bindtap="onTapCheckbox" />
+            </view>
+          </view>
+        </van-grid-item>
+      </van-grid>
+    </mp-vtabs>
+  </scroll-view>
+  <view wx:if="{{pageIndex==0}}" class="add-wrap">
+    <image src="../images/add.png" bindtap="onAddToCard"></image>
+  </view>
+  <scroll-view wx:if="{{pageIndex == 1}}" scroll-y style="overflow:hidden;height:{{viewHight}}px;">
+    <my-cart nickName="{{nickName}}" avatarUrl="{{avatarUrl}}" />
+  </scroll-view>
+  <scroll-view wx:if="{{pageIndex == 2}}" scroll-y style="overflow:hidden;height:{{viewHight}}px;">
+    <my-order nickName="{{nickName}}" avatarUrl="{{avatarUrl}}" />
+  </scroll-view>
+  <my-user wx:if="{{pageIndex==3}}" openid="{{openid}}" />
+  <mp-tabbar id="mytabber" class="tabbar" list="{{list}}" bindchange="onTabChanged"></mp-tabbar>
+</view>

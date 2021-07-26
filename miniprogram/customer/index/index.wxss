@@ -1,0 +1,67 @@
+/* miniprogram/customer/index/index.wxss */
+
+
+.tab-bar-detail{
+  width: 75rpx;
+  height: 75rpx;
+  background: transparent;
+  border-radius:25px;
+  position: fixed;  
+  z-index: 2;
+  right: 4%;
+  top:80%;
+  border:1rpx solid #F3F4F6; 
+  line-height:25rpx; 
+  text-align: center;  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.van-submit-bar{
+  bottom:10% !important;
+  background: transparent !important;
+}
+
+.van-submit-bar__bar{
+  background: transparent !important;
+}
+
+.add-image{
+  width: 64rpx;
+  height: 64rpx;
+}
+
+.tabbar{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  left:0;
+  right:0;
+}
+/* 图标大点 */
+.weui-grid__icon
+{
+  width: 200rpx !important;
+  height: 200rpx !important;
+}
+/** 固定条*/
+.add-wrap {
+  height: 81rpx;
+  width: 81rpx;
+  border-radius: 100%;
+  position: fixed;
+  bottom: 150rpx;
+  right: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  background-color: aqua;
+}
+
+.add-wrap image {
+  width: 16px;
+  height: 16px;
+  color: aqua;
+}

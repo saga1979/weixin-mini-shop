@@ -1,0 +1,6 @@
+/* miniprogram/admin/recommend/recommend.wxss */
+image {
+  height: 100rpx;
+  width: 100rpx;
+  margin-right: 50rpx;
+}

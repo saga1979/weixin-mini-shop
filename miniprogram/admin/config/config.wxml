@@ -1,0 +1,8 @@
+<view class="config-view">
+  <view class="config-view-item" wx:for="{{functions}}" wx:key="title"
+  data-index="{{index}}" bindtap="onClickFunction">{{item.title}}
+
+  </view>
+
+</view>
+
