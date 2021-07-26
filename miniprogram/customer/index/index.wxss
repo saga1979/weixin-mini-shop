@@ -46,9 +46,11 @@
   height: 200rpx !important;
 }
 /** 固定条*/
+
+
 .add-wrap {
-  height: 81rpx;
-  width: 81rpx;
+  height: 48px;
+  width: 48px;
   border-radius: 100%;
   position: fixed;
   bottom: 150rpx;
@@ -57,11 +59,12 @@
   align-items: center;
   justify-content: center;
   z-index: 999;
-  background-color: aqua;
+  background-color: transparent;
+  /* background-color: rgba(0, 255, 255, 0.548); */
 }
 
 .add-wrap image {
-  width: 16px;
-  height: 16px;
-  color: aqua;
+  width: 48px;
+  height: 48px;
+  
 }

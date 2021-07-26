@@ -34,11 +34,12 @@
     "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
-    "minifyWXSS": true
+    "minifyWXSS": true,
+    "bundle": false
   },
   "appid": "wxf5472eef4e8aec7f",
   "projectname": "weixin-mini-shop",
-  "libVersion": "2.15.0",
+  "libVersion": "2.18.0",
   "condition": {
     "search": {
       "list": []
@@ -53,13 +54,7 @@
       "list": []
     },
     "miniprogram": {
-      "list": [
-        {
-          "id": -1,
-          "name": "db guide",
-          "pathName": "pages/databaseGuide/databaseGuide"
-        }
-      ]
+      "list": []
     }
   }
 }

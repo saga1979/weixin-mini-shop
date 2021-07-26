@@ -5,66 +5,52 @@ Page({
    * Page initial data
    */
   data: {
-    goodsName: '',
-    goodsDes: '',
-    units: ['斤', '箱', '个', '只', '件'],
-    unitIndex: 0,
-    goodsPrice: 0,
-    imageUrls: [], //对象数组，包含图片的网络路径和本地路径
+    _units: ['斤', '箱', '个', '只', '件'],
+    _unitIndex: 0,
+    _goodsItems: [],
+    _addedImgs: [],
     previewImageUrls: [],//图片预览时需要的本地路径数组
-    _goodsItems: []
-
+    type: '',
+    typeIndex: 0,
+    recommend: false,
+    title: '完善新物品信息'
   },
 
   /**
    * Lifecycle function--Called when page load
    */
   onLoad: function (options) {
-    let self = this
+
+    const eventChannel = this.getOpenerEventChannel()
+    var self = this
     if (options.op == "edit") {
-      const eventChannel = this.getOpenerEventChannel()
-      eventChannel.on('showItem', function (data) {
-        console.debug(data)
-        data.imgs.forEach(img => {
-          self.data.imageUrls.push({ file: img })
-        })
+      eventChannel.on('edit', function (data) {
+        var keys = Object.keys(data.item)
+        console.debug("keys:", keys)
+        for (var index = 0; index < keys.length; index++) {
+          console.debug(keys[index], data.item[keys[index]])
+          var key = keys[index]
+          self.setData({
+            [`${key}`]: data.item[keys[index]]
+          })
+        }
         self.setData({
-          goodsName: data.name,
-          goodsDes: data.des,
-          _id: data._id,
-          unitIndex: self.data.units.indexOf(data.unit),
-          previewImageUrls: data.imgs,
-          imageUrls: self.data.imageUrls,
+          unitIndex: self.data._units.indexOf(data.item.unit),
+          previewImageUrls: data.item.imgs,
           _editting: true,
-          goodsPrice: data.price,
-          _oldItem: data,
-          _deletedImgs: []
+          _oldItem: data.item,
+          _deletedImgs: [],
+          _types: data.types,
+          title: '修改' + data.item.name + '信息'
         })
       })
-
-
-    }
-  },
-
-  /**
-   * Lifecycle function--Called when page is initially rendered
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page show
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page hide
-   */
-  onHide: function () {
-
+    } else {
+      eventChannel.on('new', function (data) {
+        self.setData({
+          _types: data.types
+        })
+      })
+    }  
   },
 
   /**
@@ -75,21 +61,6 @@ Page({
     const eventChannel = this.getOpenerEventChannel()
 
     if (this.data._editting) {
-      // var data = {}
-      // var keys = Object.keys(this.data).filter(key => !key.startsWith("_"))
-
-      // console.debug("keys:",keys)
-      // for (var index = 0; index < keys.length; index++) {
-      //   if (this.data._oldItem[keys[index]] != null 
-      //     &&this.data[keys[index]] != this.data._oldItem[keys[index]]) {
-      //     data[keys[index]] = this.data[keys[index]]
-      //   }
-      // }
-      // if (Object.keys(data).length == 0) {
-      //   console.debug("没有更改商品信息")
-      //   return
-      // }
-      // this.onUpdateItem('unload')
       eventChannel.emit('updated', {
         items: this.data._goodsItems
       })
@@ -99,36 +70,19 @@ Page({
         num: this.data._goodsItems.length,
         items: this.data._goodsItems
       })
-      console.debug(this.data._goodsItems)
-
     }
-
-
+    console.debug(this.data._goodsItems)
   },
 
-  /**
-   * Page event handler function--Called when user drop down
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * Called when page reach bottom
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * Called when user click on the top right corner to share
-   */
-  onShareAppMessage: function () {
-
-  },
   bindUnitChange: function (e) {
     this.setData({
-      unitIndex: e.detail.value
+      unit: this.data._units[e.detail.value]
+    })
+  },
+
+  bindTypeChanged: function (e) {
+    this.setData({
+      type: this.data._types[e.detail.value]
     })
   },
   onSelectImg: function () {
@@ -142,14 +96,15 @@ Page({
         let now = Date.now();
         for (var index = 0; index < res.tempFilePaths.length; index++) {
           const cloudPath = "goods/" + now + "[" + index + "]" + res.tempFilePaths[index].match(/\.[^.]+?$/)[0]
-          self.data.imageUrls.push({
-            path: cloudPath,
-            file: res.tempFilePaths[index]
-          })
+          self.data.imgs.push(res.tempFilePaths[index])
           self.data.previewImageUrls.push(res.tempFilePaths[index])
+          self.data._addedImgs.push({
+            local: res.tempFilePaths[index],
+            remote: cloudPath
+          })
         }
         self.setData({
-          imageUrls: self.data.imageUrls
+          imgs: self.data.imgs
         })
       },
       fail: e => {
@@ -165,117 +120,121 @@ Page({
     })
   },
   onDeletePic: function (e) {
-    if (this.data._editting) {
-      this.data._deletedImgs.push(this.data.imageUrls[e.detail.index].file)
-    }
     console.debug(e.detail.index)
-    this.data.imageUrls.splice(e.detail.index, 1)
+    var index = this.data._addedImgs.findIndex(
+      item => item.local == this.data.imgs[e.detail.index])
+    if (index != -1) {
+      this.data._addedImgs.splice(e.detail.index, 1)
+    } else {
+      this.data._deletedImgs.push(this.data.imgs[e.detail.index])
+    }
+    this.data.imgs.splice(e.detail.index, 1)
     this.data.previewImageUrls.splice(e.detail.index, 1)
     this.setData({
-      imageUrls: this.data.imageUrls,
+      imgs: this.data.imgs,
       previewImageUrls: this.data.previewImageUrls
     })
   },
+  /**
+   * 点击“确定”按钮后，将数据写入数据库。退出页面时，将该商品信息对象传递给商品列表页面。
+   * @param {} e 
+   */
   onUpdateItem: async function (e) {
 
-    if (this.data.imageUrls.length == 0) {
+    if (this.data.imgs.length == 0) {
       wx.showModal({
         title: '必须设置图片',
       })
       return
     }
-
-    var self = this
-    var imgsID = [];
-    let uploaded = 0;
-    for (var index in this.data.imageUrls) {
-      let filePath = this.data.imageUrls[index].file
-
-      if (filePath.startsWith("cloud:")) {
-        uploaded++;
-        imgsID.push(filePath)
-        continue// todo
-      }
+    var imgsIDs = []
+    let uploaded = 0
+    for (var index in this.data._addedImgs) {
       wx.showLoading({
-        title: `上传图片${index}/${this.data.imageUrls.length}`,
+        title: `上传图片${index}/${this.data._addedImgs.length}`
       })
-      let cloudPath = this.data.imageUrls[index].path
+      var remote = this.data._addedImgs[index].remote
+      var local = this.data._addedImgs[index].local
+
       var res = await wx.cloud.uploadFile({
-        cloudPath,
-        filePath
+        remote, local
       })
 
       if (res.fileID != null) {
         uploaded++
-        imgsID.push(res.fileID)
+        imgsIDs.push(res.fileID)
         console.debug('[上传文件] :', cloudPath, filePath)
       }
-
     }
-    
+
     wx.showLoading({
       title: "正在更新数据",
     })
     var cmd = 'set'
+    var record = {}
+    record.imgs = []
     if (this.data._editting) {
       cmd = 'update'
+      //图片集合更新为新增的图片集合+（原有图片集合-删除的图片集合）
+      //var deletedImgs = this.data._deletedImgs
+      //var imgs = this.data.imgs.filter(img => deletedImgs.indexof(img) == -1)
+      //record.imgs.push(imgs)
+      record.imgs = this.data.imgs
     }
+
+    record.imgs = record.imgs.concat(imgsIDs)
+    record.name = this.data.name
+    record.des = this.data.des
+    record.unit = this.data.unit
+    record.price = this.data.price
+    record.recommend = this.data.recommend
+    record.type = this.data.type
     var data = {
       cmd: cmd,
-      data: {
-        name: self.data.goodsName,
-        des: self.data.goodsDes,
-        imgs: imgsID,
-        unit: self.data.units[self.data.unitIndex],
-        price: self.data.goodsPrice,
-      }
+      data: record
     }
+
     if (this.data._editting) {
-      data.id = self.data._id
+      //原有记录的ID
+      data._id = this.data._id
     }
     res = await wx.cloud.callFunction({
       name: 'goods-op',
       data: data
     })
+    console.debug(res)
 
     wx.hideLoading()
-
+    var self = this
     if (res.result.success) {
       var goodsItem = data.data
       goodsItem._id = res.result.data
       self.data._goodsItems.push(goodsItem)
-      if (!self.data._editting) {
-        self.setData({
-          goodsName: '',
-          goodsDes: '',
-          imageUrls: [],
-          goodsPrice: 0,
-          isPreviewing: false,
-          previewImageUrls: []
-        })
-      } else {
+      if (self.data._editting
+        && self.data._deletedImgs.length > 0) {
         var res = await wx.cloud.deleteFile({
-          fileList: this.data._deletedImgs          
+          fileList: self.data._deletedImgs
         })
         console.debug("del:", res)
-        wx.navigateBack({
-          delta: 1,
-        })
       }
+      console.debug("goods item:", goodsItem)
+      wx.navigateBack({
+        delta: 1,
+      })
+
     } else {
-      //删除原来上传的图片
+      //如果不能成功更新数据库，需要删除已经上传到云存储的图片
       wx.cloud.deleteFile({
-        fileList: imgsID,
+        fileList: imgsIDs,
         success: res => {
           console.debug(res.fileList)
         },
         fail: console.error
       })
       wx.showToast({
-        title: '未能成功添加信息',
+        title: '上传数据失败',
         icon: 'none'
       })
     }
-
   },
 })

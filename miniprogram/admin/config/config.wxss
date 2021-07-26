@@ -11,10 +11,10 @@
   height: 300rpx;
   /* flex: 250rpx; */
   margin: 20rpx;
-  background-color: #4D7298;
+  background-color: #fff;
   border: 2px solid #77A6B6;
   border-radius: .5em;
-  color: #fff; 
+  color: #4D7298; 
   font-size: x-large;
   display: flex;
   align-items: center; 

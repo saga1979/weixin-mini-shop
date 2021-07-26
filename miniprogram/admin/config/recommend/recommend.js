@@ -20,7 +20,7 @@ Page({
     var res = await wx.cloud.callFunction({
       name: 'goods-op',
       data: {
-        cmd: 'get-all'
+        cmd: 'get'
       }
     })
     wx.hideLoading({
@@ -31,6 +31,7 @@ Page({
       wx.showToast({
         title: '数据为空',
       })
+      return
     }
 
     this.setData({

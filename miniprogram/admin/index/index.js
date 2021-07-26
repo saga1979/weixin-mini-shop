@@ -31,8 +31,7 @@ Page({
     },
     ],
     pageIndex: 0,
-    goods_items: [],
-
+    goodsItems: [],
 
   },
 
@@ -68,10 +67,10 @@ Page({
 
     console.debug(ret.result.data)
 
-    this.data._goodsTypes = []
+    this.data._types = []
 
     ret.result.data.forEach(item => {
-      this.data._goodsTypes.push(item.title)
+      this.data._types.push(item.title)
     })
 
     //监控数据库商品类别配置
@@ -92,7 +91,8 @@ Page({
           snapshot.docChanges[0].updatedFields.goodsTypes.forEach(item => {
             types.push(item.title)
           })
-          self.data._goodsTypes = types
+          self.data._types = types
+          console.log("goods types changed:", self.data._types)
         }
 
       },
@@ -128,9 +128,7 @@ Page({
    * Lifecycle function--Called when page unload
    */
   onUnload: function () {
-
-
-
+    this.data._watcher.close()
   },
 
   /**
@@ -185,7 +183,7 @@ Page({
     }
 
     this.setData({
-      goods_items: items
+      goodsItems: items
     })
     wx.hideLoading({
       complete: (res) => { },
@@ -202,7 +200,7 @@ Page({
             console.debug("没有添加商品")
             return
           }
-          var len = self.data.goods_items.length
+          var len = self.data.goodsItems.length
           //self.data.goods_items.push(result.items)
 
           for (var index = 0; index < result.num; index++) {
@@ -219,7 +217,12 @@ Page({
             })
           }
         }
-      }
+      },
+      success: function (res) {
+        res.eventChannel.emit("new", {
+          types: self.data._types
+        })
+      }    
     })
   },
   onDeleteItem: async function (e) {
@@ -242,10 +245,10 @@ Page({
         console.log(err)
       })
 
-      for (var index = 0; index < self.data.goods_items.length; index++) {
-        if (self.data.goods_items[index]._id == e.detail.data) {
+      for (var index = 0; index < self.data.goodsItems.length; index++) {
+        if (self.data.goodsItems[index]._id == e.detail.data) {
           wx.cloud.deleteFile({ //删除文件存储中的图片
-            fileList: self.data.goods_items[index].imgs,
+            fileList: self.data.goodsItems[index].imgs,
             success: res => {
               console.log("delete:" + fileList)
             },
@@ -256,19 +259,19 @@ Page({
               console.log(ret)
             }
           })
-          self.data.goods_items.splice(index, 1)
+          self.data.goodsItems.splice(index, 1)
           break;
         }
       }
       this.setData({
-        goods_items: self.data.goods_items,
+        goodsItems: self.data.goodsItems,
       })
     }
     catch (e) {
       console.log(e)
     }
   },
-  onShowDetail: function (e) {
+  onEditGoodsItem: function (e) {
     console.debug(e)
 
     let self = this
@@ -278,38 +281,20 @@ Page({
       events: {
         updated: async function (data) {
           console.debug("item:", data.items)
-
           if (data.items.length > 0) {
-            //调用云函数更新
-            wx.showLoading({
-              title: "正在更新数据",
-            })
-            await wx.cloud.callFunction({
-              name: 'goods-op',
-              data: {
-                cmd: 'update',
-                id: data.items[0]._id,
-                data: data.items[0]
-              }
-            }).then(ret => {
-              console.debug(ret)
-            }).catch(console.error)
-
-
-            wx.hideLoading({
-              success: (res) => { },
-            })
-            var item_index = self.data.goods_items.findIndex(item => item._id == data.items[0]._id)
+            var item_index = self.data.goodsItems.findIndex(item => item._id == data.items[0]._id)
             //只刷新必要的部分视图
             self.setData({
               ['goods_items[' + item_index + ']']: data.items[0]
             })
           }
-
         }
       },
       success: function (res) {
-        res.eventChannel.emit("showItem", self.data.goods_items[e.currentTarget.dataset.index])
+        res.eventChannel.emit("edit", {
+          item: self.data.goodsItems[e.currentTarget.dataset.index],
+          types: self.data._types
+        })
       }
     })
   },

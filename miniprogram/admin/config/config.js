@@ -19,7 +19,7 @@ Component({
     functions: [
       {
         title: "类别",
-        url: "../config/goods-types-manager/goods-types-manager"
+        url: "../config/types/goods-types-manager"
       },
       {
         title: "推荐",

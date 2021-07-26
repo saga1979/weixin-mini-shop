@@ -1,7 +1,7 @@
 <scroll-view scroll-y="true">
   <view class="weui-cells">
 
-    <view class="weui-cell weui-cell_switch" wx:for="{{goodsInfos}}" wx:key='_id' wx:if="{{item.isSelling}}">
+    <view class="weui-cell weui-cell_switch" wx:for="{{goodsInfos}}" wx:key='_id' >
       <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
         <image class="weui-media-box__thumb" mode="aspectFit" data-index="{{index}}" bindtap="onSelectImg"
           src="{{item.imgs[0]}}" />

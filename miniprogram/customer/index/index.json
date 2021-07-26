@@ -1,16 +1,13 @@
 {
   "usingComponents": {
     "mp-tabbar": "/miniprogram_npm/weui-miniprogram/tabbar/tabbar",
-    "mp-grids" : "/miniprogram_npm/weui-miniprogram/grids/grids",
     "van-grid": "../../components/vant/dist/grid/index",
     "van-grid-item": "../../components/vant/dist/grid-item/index",
-    "van-tab" : "../../components/vant/dist/tab/index",
-    "van-tabs" : "../../components/vant/dist/tabs/index",
     "my-cart" : "../cart/cart",
     "my-order" : "../order/order",
     "my-user" : "../user/user",
-    "mp-vtabs": "@miniprogram-component-plus/vtabs",
-    "mp-vtabs-content": "@miniprogram-component-plus/vtabs-content"
+    "mp-vtabs": "../../components/weui-ex/vtabs",
+    "mp-vtabs-content": "../../components/weui-ex/vtabs-content"
   },
   "navigationBarTitleText": "思辰非（济南）"
 }

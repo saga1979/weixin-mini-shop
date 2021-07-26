@@ -3,9 +3,9 @@
     <user-info wx:if="{{pageIndex == 0}}" openid="{{_openid}}" />
     <block wx:if="{{pageIndex == 2}}">
         <scroll-view  scroll-y style="overflow:hidden;height:{{viewHight}}px;">
-            <view class="weui-slidecells" wx:for="{{goods_items}}" wx:key="_id">
+            <view class="weui-slidecells" wx:for="{{goodsItems}}" wx:key="_id">
                 <mp-slideview show="{{false}}" buttons="{{item.buttons}}" bindbuttontap="onDeleteItem">
-                    <view class="weui-slidecell weui-media-box weui-media-box_appmsg" bindtap="onShowDetail"
+                    <view class="weui-slidecell weui-media-box weui-media-box_appmsg" bindtap="onEditGoodsItem"
                         data-index="{{index}}">
                         <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
                             <image class="weui-media-box__thumb" mode="aspectFit" src="{{item.imgs[0]}}" />
@@ -22,6 +22,7 @@
             <image src="../images/add.ico"></image>
         </view>
     </block>
+    <user-config wx:if="{{pageIndex==3}}" height="{{viewHight}}px" />
     <mp-tabbar id="admin-index-tabber" list="{{functions}}" bindchange="onTabChanged" />
  
 </view>

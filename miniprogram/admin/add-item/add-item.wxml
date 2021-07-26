@@ -1,30 +1,43 @@
-<mp-form-page title="完善新物品信息">
+<mp-form-page title="{{title}}">
   <mp-form id="form" rules="{{rules}}" models="{{formData}}">
 
     <mp-cells title="" footer="">
       <mp-cell prop="goods_name" title="名称" ext-class="">
-        <input data-field="name" class="weui-input" placeholder="商品名称" model:value="{{goodsName}}" />
+        <input data-field="name" class="weui-input" placeholder="商品名称" model:value="{{name}}" />
       </mp-cell>
       <mp-cell ext-class="weui-cell_select weui-cell_select-after" title="单位">
-        <picker bindchange="bindUnitChange" value="{{unitIndex}}" range="{{units}}">
-          <view class="weui-select">{{units[unitIndex]}}</view>
+        <picker bindchange="bindUnitChange" value="{{unitIndex}}" range="{{_units}}">
+          <view class="weui-select">{{unit}}</view>
         </picker>
       </mp-cell>
       <mp-cell prop="goods_price" title="单价" ext-class="">
         <input data-field="price" class="weui-input" type="digit" placeholder="请输入商品单价（元）"
-          model:value="{{goodsPrice}}" />
+          model:value="{{price}}" />
       </mp-cell>
 
+      <view class="weui-cell weui-cell_switch">
+        <view class="weui-cell__bd">推荐</view>
+        <view class="weui-cell__ft">
+          <switch model:checked="{{recommend}}"  />
+        </view>
+      </view>
+
+      <mp-cell ext-class="weui-cell_select weui-cell_select-after">
+        <view slot="title" class="weui-label">类别</view>
+        <picker bindchange="bindTypeChanged" model:value="{{typeIndex}}" range="{{_types}}">
+          <view class="weui-select"> {{type}}</view>
+        </picker>
+      </mp-cell>
 
       <mp-cell has-header="{{false}}" has-footer="{{false}}" ext-class="" title="描述">
-        <textarea class="weui-textarea" name="goods_text" model:value="{{goodsDes}}" placeholder="请输入商品描述"
+        <textarea class="weui-textarea" name="goods_text" model:value="{{des}}" placeholder="请输入商品描述"
           style="height: 100px" />
         </mp-cell>
 			<mp-cell has-header="{{false}}" has-footer="{{false}}" title="" ext-class="" >
 			  <view class="goods-image-list">
-				 <block   wx:for="{{imageUrls}}" wx:key="path">
+				 <block   wx:for="{{previewImageUrls}}" wx:key="path">
 					 <view bindtap="onPreviewImage" data-index="{{index}}">
-						<image class='goods-image' mode="aspectFit" src="{{item.file}}" />
+						<image class='goods-image' mode="aspectFit" src="{{item}}" />
 					 </view>
 				 </block>		 
 				 <mp-icon icon="add" color="black" size="{{48}}" bindtap="onSelectImg" />

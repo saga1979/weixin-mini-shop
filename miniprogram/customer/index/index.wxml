@@ -1,7 +1,7 @@
 <view class="page">
   <!-- 展示商品列表 -->
   <scroll-view wx:if="{{pageIndex == 0}}" scroll-y style="overflow:hidden;height:{{viewHight}}px;">
-    <mp-vtabs vtabs="{{goodsTypesForVtabs}}" activeTab="{{activeTab}}" bindtabclick="onSwitchType" bindchange="onChange" class="test">
+    <mp-vtabs vtabs="{{goodsTypesForVtabs}}" activeTab="{{activeTab}}" bindtabclick="onSwitchType" >
       <van-grid column-num="2">
         <van-grid-item wx:for="{{goods_items}}" wx:key="_id" use-slot text="{{item.name}}">
           <view style="flex-direction:row">
@@ -15,9 +15,7 @@
       </van-grid>
     </mp-vtabs>
   </scroll-view>
-  <view wx:if="{{pageIndex==0}}" class="add-wrap">
-    <image src="../images/add.png" bindtap="onAddToCard"></image>
-  </view>
+
   <scroll-view wx:if="{{pageIndex == 1}}" scroll-y style="overflow:hidden;height:{{viewHight}}px;">
     <my-cart nickName="{{nickName}}" avatarUrl="{{avatarUrl}}" />
   </scroll-view>
