@@ -9,13 +9,13 @@
   align-items: center;
   justify-content: center;
   z-index: 999;
-  background-color: aqua;
+  background-color: #c2d4e5;
 }
 
 .add-wrap image {
   width: 16px;
   height: 16px;
-  color: aqua;
+
 }
 
 .navigator {

@@ -1,0 +1,56 @@
+<!--miniprogram/admin/discount/discount.wxml-->
+<view>
+  <view>
+    <mp-cells>
+      <mp-cell>
+        <view>名称：</view>
+        <input model:value="{{title}}" bindinput="titleChange" data-field="name"  placeholder="请输入活动名称" slot="footer" />
+      </mp-cell>
+    </mp-cells>
+    <mp-cells>
+      <mp-cell title="规则:">
+        <input model:value="{{total}}" bindinput="totalChange" data-field="  " type="number" placeholder="满多少" />
+        <input model:value="{{cut}}" bindinput="cutChange" data-field="name" type="number" placeholder="减多少" slot="footer" />
+      </mp-cell>
+    </mp-cells>
+
+    <mp-cells>
+      <mp-cell title="开始:">
+        <picker mode="date" model:value="{{startDate}}" start="2020-12-03" end="2030-12-03" bindchange="bindStartDateChange">
+          <view class="weui-input">{{startDate}}</view>
+        </picker>
+        <picker mode="time" model:value="{{startTime}}" start="00:00" end="23:59" bindchange="bindStartTimeChange" slot="footer">
+          <view class="weui-input">{{startTime}}</view>
+        </picker>
+      </mp-cell>
+    </mp-cells>
+    <!-- <view class="weui-cells__title">活动结束时间</view> -->
+    <mp-cells>
+      <mp-cell title="结束:">
+        <picker  mode="date" model:value="{{endDate}}" start="2020-12-03" end="2030-12-03" bindchange="bindEndDateChange">
+          <view class="weui-input">{{endDate}}</view>
+        </picker>
+        <picker mode="time" model:value="{{endTime}}" start="00:00" end="23:59" bindchange="bindEndTimeChange" slot="footer">
+          <view class="weui-input">{{endTime}}</view>
+        </picker>
+      </mp-cell>
+    </mp-cells>
+  </view>
+  <view>
+    <scroll-view scroll-y="true" style="height: {{viewHeight-200}}px;">
+      <view class="weui-cells">
+
+        <view class="weui-cell weui-cell_switch" wx:for="{{goodsInfos}}" wx:key='_id'>
+          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+            <image class="weui-media-box__thumb" mode="aspectFit" data-index="{{index}}" bindtap="onSelectImg"
+              src="{{item.imgs[0]}}" />
+          </view>
+          <view class="weui-cell__bd">{{item.name}}</view>
+          <view class="weui-cell__ft">
+            <switch data-id="{{item._id}}" data-index="{{index}}" checked="{{item.checked}}" bindchange="goodsOnorOff" />
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

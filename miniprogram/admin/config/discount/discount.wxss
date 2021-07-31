@@ -1,0 +1,12 @@
+@import '/style/scf.wxss';
+image {
+  height: 100rpx;
+  width: 100rpx;
+  margin-right: 50rpx;
+}
+picker {
+  margin-left: 50rpx;
+}
+input {
+  margin-left: 50rpx;
+}

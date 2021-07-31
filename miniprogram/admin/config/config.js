@@ -24,6 +24,10 @@ Component({
       {
         title: "推荐",
         url: "../config/recommend/recommend"
+      },
+      {
+        title: "活动",
+        url: "../config/discount-manager/discount-manager"
       }
     ],
   

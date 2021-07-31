@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "mp-slideview": "/miniprogram_npm/weui-miniprogram/slideview/slideview",
+    "mp-actionSheet": "/miniprogram_npm/weui-miniprogram/actionsheet/actionsheet",
+    "mp-icon": "/miniprogram_npm/weui-miniprogram/icon/icon",
+    "mp-cell" : "/miniprogram_npm/weui-miniprogram/cell/cell"
+
+  } 
+}
