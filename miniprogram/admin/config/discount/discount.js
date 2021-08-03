@@ -32,14 +32,12 @@ Page({
         }
       })
       console.debug(res)
-      if (res.result.success) {
+      if (res.result.data != null && res.result.data.length > 0) {
         var discountInfo = res.result.data[0]
-
         var start = new Date(discountInfo.start)
         var end = new Date(discountInfo.end)
         discountInfo.start = start
         discountInfo.end = end
-
         self.setData({
           title: discountInfo.title,
           total: discountInfo.total,
@@ -105,11 +103,7 @@ Page({
         viewHeight: new_height
       })
     }
-
     console.debug(this.data.startDate)
-
-
-
   },
 
   /**

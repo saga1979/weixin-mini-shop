@@ -3,7 +3,7 @@
   <scroll-view wx:if="{{pageIndex == 0}}" scroll-y style="overflow:hidden;height:{{viewHight}}px;">
     <mp-vtabs vtabs="{{goodsTypesForVtabs}}" activeTab="{{activeTab}}" bindtabclick="onSwitchType" >
       <van-grid column-num="2">
-        <van-grid-item wx:for="{{goods_items}}" wx:key="_id" use-slot text="{{item.name}}">
+        <van-grid-item wx:for="{{goodsItems}}" wx:key="_id" use-slot text="{{item.name}}">
           <view style="flex-direction:row">
             <label>{{item.name}}</label>
             <view style="flex-direction:column">
@@ -15,6 +15,10 @@
       </van-grid>
     </mp-vtabs>
   </scroll-view>
+
+  <view wx:if="{{pageIndex==0}}" class="add-wrap">
+    <image src="../images/customer_user_add.png" bindtap="onAddToCard"></image>
+  </view>
 
   <scroll-view wx:if="{{pageIndex == 1}}" scroll-y style="overflow:hidden;height:{{viewHight}}px;">
     <my-cart nickName="{{nickName}}" avatarUrl="{{avatarUrl}}" />

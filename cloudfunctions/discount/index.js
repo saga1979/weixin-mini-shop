@@ -27,11 +27,11 @@ exports.main = async (request) => {
       }
     }
     case 'update': {
-      if (request.data.start != null) {
-        request.data.start = new Date(request.data.start)
+      if (request.data.update.start != null) {
+        request.data.update.start = new Date(request.data.update.start)
       }
-      if (request.data.end != null) {
-        request.data.end = new Date(request.data.end)
+      if (request.data.update.end != null) {
+        request.data.update.end = new Date(request.data.update.end)
       }
 
       var id = request.data.id

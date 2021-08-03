@@ -1,2 +1,35 @@
-<!--miniprogram/customer/cart/cart.wxml-->
-<text>miniprogram/customer/cart/cart.wxml</text>
+<scroll-view scroll-y>
+  <view class="weui-slidecells" wx:for="{{goodsList}}" wx:key="_id">
+    <mp-slideview show="{{false}}" buttons="{{item.buttons}}" icon="{{false}}" bindbuttontap="onDeleteItem">
+      <view class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+
+        <radio data-id="{{item._id}}" data-index="{{index}}" checked="{{item.selected}}" bindtap="onItemClicked"
+          disabled="{{!item.isSelling}}" />
+
+        <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+          <image class="weui-media-box__thumb" src="{{item.imgs[0]}}" />
+        </view>
+        <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+          <view class="weui-media-box__title">
+            <text>{{item.name}}</text>
+            <block wx:if="{{item.isSelling}}" wx:for="{{item.discounts}}" wx:for-item="discount" wx:key="title">
+              <mp-badge content="{{discount.title}}" style="margin-left: 5px;" />
+            </block>
+            <mp-badge wx:if="{{!item.isSelling}}" content="停售"></mp-badge>
+          </view>
+          <view class="weui-media-box weui-media-box_appmsg">
+            <view class="weui-media-box__desc">{{item.order_price}} 元 </view>
+
+            <van-stepper id="{{item._id}}" data-index="{{index}}" min="0" value="{{item.count}}" step="1"
+              bind:change="onNumChanged" disabled="{{!item.isSelling}}" />
+
+          </view>
+
+        </view>
+      </view>
+    </mp-slideview>
+  </view>
+
+  <view style="height:100rpx" />
+  <van-submit-bar price="{{totalPrice}}" button-text="生成订单" bind:submit="onSubmitOrder" />
+</scroll-view>

@@ -12,7 +12,7 @@ Page({
 
     },
     {
-      "text": "收藏夹",
+      "text": "购物车",
       "iconPath": "/customer/images/customer_user_cart.png",
       "selectedIconPath": "/customer/images/selected_common.png",
 
@@ -31,16 +31,14 @@ Page({
     },
     ],
     pageIndex: 0,
-    goods_items: [],//当前需要显示的商品
-    _goods_items: [],
-  
-    grid_items: [],
-    _selected_items: [],  
+    goodsItems: [],//当前需要显示的商品
+    _goodsItems: [],  
+    gridItems: [],
+    _selectedItems: [],  
     nickName: '',
     avatarUrl: '',
     activeTab: 0,
     _goodsTypes: [],
-
   },
 
   /**
@@ -95,7 +93,7 @@ Page({
       }
     })
     //todo...如果没有有效商品该怎么办？
-    if (this.data.goods_items == null || this.data.goods_items.length == 0) {
+    if (this.data.goodsItems == null || this.data.goodsItems.length == 0) {
       //todo...
     }
     wx.hideLoading({
@@ -184,7 +182,65 @@ Page({
     })
   },
 
-  
+  onTapCheckbox: function (e) {
+    console.debug(e)
+    var index = this.data._selectedItems.findIndex(item => item == e.target.dataset.id)
+
+    if (index == -1) {
+      this.data._selectedItems.push(e.target.dataset.id);
+    } else {
+      this.data._selectedItems.splice(index, 1)
+    }
+    var index = e.target.dataset.index
+
+    this.setData({
+      ['goodsItems[' + index + '].isChecked']: !this.data.goodsItems[index].isChecked
+    })
+
+  },
+  onAddToCard: function (e) {
+    let self = this
+    console.debug(this.data._selectedItems)
+    wx.cloud.callFunction({
+      name: "cart-op",
+      data: {
+        cmd: "add",
+        data: {
+          ids: this.data._selectedItems
+        }
+      }
+    }).then(res => {
+
+      console.debug(res)
+      if (res.result.success) {
+        this.data._selectedItems = []
+
+        for (var index = 0; index < self.data.goodsItems.length; index++) {
+          if (self.data.goodsItems[index].isChecked) {
+            console.debug("index:" + index + " set unchecked")
+            self.setData({
+              ['goodsItems[' + index + '].isChecked']: false
+            })
+          }
+        }
+
+        if (res.result.data == 0) {
+          wx.showToast({
+            title: '已加入',
+          })
+        } else {
+          self.data.list[1].dot = true
+          self.setData({
+            ['list[1]']: self.data.list[1]
+          })
+        }
+      }
+
+    }).catch(err => {
+      console.error(err)
+    })
+  },
+
 
   onSwitchType: async function (e) {
     const index = e.detail.index
@@ -192,6 +248,7 @@ Page({
       return;
     }
     this.data.activeTab = index
+    this.data._selectedItems = []
 
     wx.showLoading({
       title: '正在加载数据',
@@ -253,24 +310,23 @@ Page({
 
   makeShowInfos: function (goodsInfos) {
 
-    this.data.grid_items = []
+    this.data.gridItems = []
     for (var index = 0; index < goodsInfos.length; index++) {
       var grid_item = {
         imgUrl: goodsInfos[index].imgs[0],
         url: '../../components/goods-detail/detail?_id=' + goodsInfos[index]._id,
         text: goodsInfos[index].name
       }
-      this.data.grid_items.push(grid_item)
+      this.data.gridItems.push(grid_item)
     }
 
-    this.data.goods_items = goodsInfos
+    this.data.goodsItems = goodsInfos
 
-    for (var index = 0; index < this.data.goods_items.length; index++) {
-      this.data.goods_items[index]["isChecked"] = false
+    for (var index = 0; index < this.data.goodsItems.length; index++) {
+      this.data.goodsItems[index]["isChecked"] = false
     }
     this.setData({
-      //grid_items: self.data.grid_items,
-      goods_items: goodsInfos
+      goodsItems: goodsInfos
     })
   }
 }
